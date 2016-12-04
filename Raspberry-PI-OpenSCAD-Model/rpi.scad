@@ -5,11 +5,25 @@ WIDTH = 56;
 LENGTH = 85;
 HEIGHT = 1.5;
 
-module ethernet ()
+METALLIC = "silver";
+
+ETHERNET_LENGTH = 21.2;
+ETHERNET_WIDTH = 16;
+ETHERNET_HEIGHT = 13.3;
+ETHERNET_DIMENSIONS = [ETHERNET_LENGTH,ETHERNET_WIDTH,ETHERNET_HEIGHT];
+
+function offset_x(ledge) = LENGTH - ETHERNET_LENGTH + ledge;
+
+module ethernet_port ()
 	{
-	//ethernet port
-	color("silver")
-	translate([LENGTH-20,1.5,HEIGHT]) cube([21.2,16,13.3]); 
+    
+    ledge = 1.2;
+    pcb_margin = 1.5;
+    offset = [offset_x(ledge),pcb_margin,HEIGHT];
+        
+	color(METALLIC)
+        translate(offset) 
+            cube(ETHERNET_DIMENSIONS); 
 	}
 
 
@@ -127,7 +141,7 @@ module led()
 module rpi ()
 	{
 		pcb ();
-		ethernet ();
+		ethernet_port ();
 		usb (); 
 		composite (); 
 		audio (); 
