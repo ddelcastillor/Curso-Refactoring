@@ -26,6 +26,7 @@ AUDIO_PORT_DIMENSIONS = [AUDIO_PORT_LENGTH,AUDIO_PORT_WIDTH,AUDIO_PORT_HEIGHT];
 
 RIGHT = [90,0,0];
 LEFT = [-90,0,0];
+TILT = [0,0,180];
 
 function offset_x(ledge,port_length) = LENGTH - port_length + ledge;
 
@@ -107,10 +108,18 @@ module audio_port ()
     
 module gpio ()
 	{
-	//headers
-	rotate([0,0,180])
-	translate([-1,-WIDTH+6,HEIGHT])
-	off_pin_header(rows = 13, cols = 2);
+    offset_x = -1;
+    offset_y = -50;
+    offset = [offset_x,offset_y,HEIGHT];
+        
+    num_pins_for_row = 13;   
+    num_row_of_pins = 2; 
+	rotate(TILT)     
+        translate(offset)
+            off_pin_header(
+                            rows = num_pins_for_row,
+                            cols = num_row_of_pins
+                          );
 	}
 
 module hdmi ()
