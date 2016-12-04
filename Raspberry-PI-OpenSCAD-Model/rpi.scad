@@ -16,6 +16,7 @@ BLUE = [.4,.4,.95];
 BLACK = [0,0,0];
 DARK_BLUE = [.2,.2,.7];
 DARK_GREEN = [0.2,0.5,0];
+RED = [0.9,0.1,0,0.6];
 
 ETHERNET_LENGTH = 21.2;
 ETHERNET_WIDTH = 16;
@@ -48,6 +49,14 @@ SLOT_SD_HEIGHT = 3.7;
 SLOT_SD_DIMENSIONS = [SLOT_SD_LENGTH,SLOT_SD_WIDTH,SLOT_SD_HEIGHT];
 
 SD_CARD_DIMENSIONS = [32, 24, 2];
+
+SPACE_ACT = 11.5;
+SPACE_PWR = 9.45;
+SPACE_FDX = 6.55;
+SPACE_LNK = 4.5;
+SPACE_100 = 2.45;
+SPACE_OFFSETX_LEDS = [SPACE_ACT,SPACE_PWR,SPACE_FDX,SPACE_LNK,SPACE_100];
+LED_DIMENSIONS = [1.0,1.6,0.7];
 
 RIGHT = [90,0,0];
 LEFT = [-90,0,0];
@@ -227,26 +236,19 @@ module pcb ()
 
 module leds()
 	{
-		// act
-		color([0.9,0.1,0,0.6])
-		translate([LENGTH-11.5,WIDTH-7.55,HEIGHT]) led();
-		// pwr
-		color([0.9,0.1,0,0.6])
-		translate([LENGTH-9.45,WIDTH-7.55,HEIGHT]) led();
-
-		// fdx
-		color([0.9,0.1,0,0.6])
-		translate([LENGTH-6.55,WIDTH-7.55,HEIGHT]) led();
-		// lnk
-		color([0.9,0.1,0,0.6])
-		translate([LENGTH-4.5,WIDTH-7.55,HEIGHT]) led();
-		// 100
-		color([0.9,0.1,0,0.6])
-		translate([LENGTH-2.45,WIDTH-7.55,HEIGHT]) led();
+     offset_y = 48.45;
+     number_of_leds = len(SPACE_OFFSETX_LEDS);   
+     for (i = [0:number_of_leds + ARRAY_BASE_CORRECTION])
+         {
+            offset_x = LENGTH-SPACE_OFFSETX_LEDS[i];
+            color(RED)
+                translate([offset_x,offset_y,HEIGHT]) 
+                    led();  
+        }      
 	}
 module led()
 	{
-		cube([1.0,1.6,0.7]);
+		cube(LED_DIMENSIONS);
 	}
 
 module rpi ()
