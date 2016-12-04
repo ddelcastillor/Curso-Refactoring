@@ -29,6 +29,11 @@ HDMI_WIDTH = 11.7;
 HDMI_HEIGHT = 6.5;
 HDMI_DIMENSIONS = [HDMI_LENGTH,HDMI_WIDTH,HDMI_HEIGHT];
 
+POWER_CONNECTOR_LENGTH = 5.6;
+POWER_CONNECTOR_WIDTH = 8;
+POWER_CONNECTOR_HEIGHT = 2.9;
+POWER_CONNECTOR_DIMENSIONS = [POWER_CONNECTOR_LENGTH,POWER_CONNECTOR_WIDTH,POWER_CONNECTOR_HEIGHT];
+
 RIGHT = [90,0,0];
 LEFT = [-90,0,0];
 TILT = [0,0,180];
@@ -136,12 +141,16 @@ module hdmi ()
         translate ([37.1,-1,HEIGHT])
             cube(HDMI_DIMENSIONS);
 	}
-
-module power ()
+    
+module power_connector ()
 	{
-	color("silver")
-	translate ([-0.8,3.8,HEIGHT])
-	cube ([5.6, 8,4.4-HEIGHT]);
+    offset_x = -0.8;
+    offset_y = 3.8;
+    offset = [offset_x,offset_y,HEIGHT];
+        
+	color(METALLIC)
+        translate (offset)
+            cube (POWER_CONNECTOR_DIMENSIONS);
 	}
 
 module sd ()
@@ -205,7 +214,7 @@ module rpi ()
 		audio_port (); 
 		gpio (); 
 		hdmi ();
-		power ();
+		power_connector ();
 		sd ();
 		leds ();
 	}
