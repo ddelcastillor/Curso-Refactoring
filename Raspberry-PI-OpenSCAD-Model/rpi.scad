@@ -8,6 +8,8 @@ HEIGHT = 1.5;
 METALLIC = "silver";
 CHROME = [.9,.9,.9];
 BLUE = [.4,.4,.95];
+BLACK = [0,0,0];
+DARK_BLUE = [.2,.2,.7];
 
 ETHERNET_LENGTH = 21.2;
 ETHERNET_WIDTH = 16;
@@ -33,6 +35,13 @@ POWER_CONNECTOR_LENGTH = 5.6;
 POWER_CONNECTOR_WIDTH = 8;
 POWER_CONNECTOR_HEIGHT = 2.9;
 POWER_CONNECTOR_DIMENSIONS = [POWER_CONNECTOR_LENGTH,POWER_CONNECTOR_WIDTH,POWER_CONNECTOR_HEIGHT];
+
+SLOT_SD_LENGTH = 16.8;
+SLOT_SD_WIDTH = 28.5;
+SLOT_SD_HEIGHT = 3.7;
+SLOT_SD_DIMENSIONS = [SLOT_SD_LENGTH,SLOT_SD_WIDTH,SLOT_SD_HEIGHT];
+
+SD_CARD_DIMENSIONS = [32, 24, 2];
 
 RIGHT = [90,0,0];
 LEFT = [-90,0,0];
@@ -153,15 +162,30 @@ module power_connector ()
             cube (POWER_CONNECTOR_DIMENSIONS);
 	}
 
+module slot_sd ()
+	{
+    offset_x = 0.9;
+    offset_y = 15.2;
+    offset_z = -5.2+HEIGHT;
+    offset = [offset_x, offset_y, offset_z];  
+        
+	color (BLACK)
+        translate (offset)
+            cube (SLOT_SD_DIMENSIONS);
+	}
+    
+module card_sd ()
+	{  
+    offset = [-17.3,17.7,-2.9];    
+	color (DARK_BLUE)
+        translate (offset)
+            cube (SD_CARD_DIMENSIONS);
+	}
+
 module sd ()
 	{
-	color ([0,0,0])
-	translate ([0.9, 15.2,-5.2+HEIGHT ])
-	cube ([16.8, 28.5, 5.2-HEIGHT]);
-
-	color ([.2,.2,.7])
-	translate ([-17.3,17.7,-2.9])
-	cube ([32, 24, 2] );
+    slot_sd ();
+    card_sd ();
 	}
 
 module mhole ()
