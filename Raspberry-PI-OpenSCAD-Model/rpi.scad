@@ -6,6 +6,8 @@ LENGTH = 85;
 HEIGHT = 1.5;
 
 METALLIC = "silver";
+CHROME = [.9,.9,.9];
+BLUE = [.4,.4,.95];
 
 ETHERNET_LENGTH = 21.2;
 ETHERNET_WIDTH = 16;
@@ -16,6 +18,14 @@ USB_LENGTH = 17.3;
 USB_WIDTH = 13.3;
 USB_HEIGHT = 16;
 USB_DIMENSIONS = [USB_LENGTH,USB_WIDTH,USB_HEIGHT];
+
+AUDIO_PORT_WIDTH = 11.5;
+AUDIO_PORT_HEIGHT = 10.1;
+AUDIO_PORT_LENGTH = 12.1;
+AUDIO_PORT_DIMENSIONS = [AUDIO_PORT_LENGTH,AUDIO_PORT_WIDTH,AUDIO_PORT_HEIGHT];
+
+RIGHT = [90,0,0];
+LEFT = [-90,0,0];
 
 function offset_x(ledge,port_length) = LENGTH - port_length + ledge;
 
@@ -39,37 +49,62 @@ module usb_port ()
         translate([offset_x(ledge,USB_LENGTH),offset_y,HEIGHT]) 
             cube(USB_DIMENSIONS);
 	}
-
-module composite ()
+module composite_block ()
+    {
+    color("yellow")
+        cube([10,10,13]);    
+    }
+module composite_jack ()
+    {
+    fine = .5;
+    translate([5,19,8])
+        rotate(RIGHT)
+            color(CHROME)
+                cylinder(h = 9.3, r = 4.15, $fs=fine);    
+    }
+    
+module composite_port ()
 	{
-	//composite port
-	translate([LENGTH-43.6,WIDTH-12,HEIGHT])
+    offset_x = 41.4;
+    pcb_margin = 12;
+    offset_y = WIDTH-pcb_margin;
+	translate([offset_x,offset_y,HEIGHT])
 		{
-		color("yellow")
-		cube([10,10,13]);
-
-		translate([5,19,8])
-		rotate([90,0,0])
-		color([.9,.9,.9])
-		cylinder(h = 9.3, r = 4.15, $fs=.5);
+        composite_block();
+        composite_jack();
 		}
 	}
 
-module audio ()
+module audio_block ()
+    {
+	color(BLUE)
+        cube(AUDIO_PORT_DIMENSIONS);       
+    }
+
+function half(value) = value / 2;
+
+function radius(diameter) = half(diameter);
+    
+module audio_jack ()
+    {
+    diameter = 6.7;
+    radius = radius(diameter);
+    offset = [half(AUDIO_PORT_LENGTH),AUDIO_PORT_WIDTH,AUDIO_PORT_HEIGHT-radius];
+    translate(offset)
+        rotate(LEFT)
+            color(BLUE)
+                cylinder(h = 3.5, r = radius, $fs=FINE);
+    }   
+module audio_port ()
 	{
-	//audio jack
-	translate([LENGTH-26,WIDTH-11.5,HEIGHT])
+    offset_x = 59;   
+	translate([offset_x,WIDTH-AUDIO_PORT_WIDTH,HEIGHT])
 		{
-		color([.4,.4,.95])
-		cube([12.1,11.5,10.1]);
-		translate([6,11.5,10.1-(6.7/2)])
-		rotate([-90,0,0])
-		color([.4,.4,.95])
-		cylinder(h = 3.5, r = 6.7/2, $fs=.5);
+		audio_block();
+        audio_jack();    
 		}
 	}
-
-
+    
 module gpio ()
 	{
 	//headers
@@ -149,8 +184,8 @@ module rpi ()
 		pcb ();
 		ethernet_port ();
 		usb_port (); 
-		composite (); 
-		audio (); 
+		composite_port (); 
+		audio_port (); 
 		gpio (); 
 		hdmi ();
 		power ();
