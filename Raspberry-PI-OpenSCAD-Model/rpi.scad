@@ -24,6 +24,11 @@ AUDIO_PORT_HEIGHT = 10.1;
 AUDIO_PORT_LENGTH = 12.1;
 AUDIO_PORT_DIMENSIONS = [AUDIO_PORT_LENGTH,AUDIO_PORT_WIDTH,AUDIO_PORT_HEIGHT];
 
+HDMI_LENGTH = 15.1;
+HDMI_WIDTH = 11.7;
+HDMI_HEIGHT = 6.5;
+HDMI_DIMENSIONS = [HDMI_LENGTH,HDMI_WIDTH,HDMI_HEIGHT];
+
 RIGHT = [90,0,0];
 LEFT = [-90,0,0];
 TILT = [0,0,180];
@@ -124,9 +129,12 @@ module gpio ()
 
 module hdmi ()
 	{
-	color ("silver")
-	translate ([37.1,-1,HEIGHT])
-	cube([15.1,11.7,8-HEIGHT]);
+    offset_x = 37.1;
+    offset_y = -1;
+    offset = [offset_x,offset_y,HEIGHT];
+	color (METALLIC)
+        translate ([37.1,-1,HEIGHT])
+            cube(HDMI_DIMENSIONS);
 	}
 
 module power ()
