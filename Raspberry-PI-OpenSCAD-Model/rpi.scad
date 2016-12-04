@@ -1,15 +1,21 @@
 
 use <pin_headers.scad>;
 
+ARRAY_BASE_CORRECTION = -1;
+
 WIDTH = 56;
 LENGTH = 85;
 HEIGHT = 1.5;
+
+FINE = .5;
+FINEST = .1;
 
 METALLIC = "silver";
 CHROME = [.9,.9,.9];
 BLUE = [.4,.4,.95];
 BLACK = [0,0,0];
 DARK_BLUE = [.2,.2,.7];
+DARK_GREEN = [0.2,0.5,0];
 
 ETHERNET_LENGTH = 21.2;
 ETHERNET_WIDTH = 16;
@@ -76,11 +82,10 @@ module composite_block ()
     }
 module composite_jack ()
     {
-    fine = .5;
     translate([5,19,8])
         rotate(RIGHT)
             color(CHROME)
-                cylinder(h = 9.3, r = 4.15, $fs=fine);    
+                cylinder(h = 9.3, r = 4.15, $fs=FINE);    
     }
     
 module composite_port ()
@@ -190,18 +195,33 @@ module sd ()
 
 module mhole ()
 	{
-	cylinder (r=3/2, h=HEIGHT+.2, $fs=0.1);
+    diameter = 3;
+    radius = radius(diameter);
+	cylinder (r=radius, h=HEIGHT+.2, $fs=FINEST);
 	}
 
+module integrate_circuit ()
+	{
+    color(DARK_GREEN)
+        linear_extrude(height = HEIGHT)
+            square([LENGTH,WIDTH]); 
+	}
+    
+module holes ()
+	{
+     positions = [[25.5, 18,-0.1],[LENGTH-5, WIDTH-12.5, -0.1]];  
+     number_of_holes = len(positions);   
+     for (i = [0:number_of_holes + ARRAY_BASE_CORRECTION]){
+        translate (positions[i]) 
+            mhole ();   
+     }      
+	}
 module pcb ()
 	{
 		difference ()
 		{
-		color([0.2,0.5,0])
-		linear_extrude(height = HEIGHT)
-		square([LENGTH,WIDTH]); //pcb
-		translate ([25.5, 18,-0.1]) mhole (); 
-		translate ([LENGTH-5, WIDTH-12.5, -0.1]) mhole (); 
+            integrate_circuit ();
+            holes();
 		}
 	}
 
