@@ -1,0 +1,26 @@
+# Para instalar PHPUnit hay que ejecutar los siguientes comando en la terminal de mac
+
+	curl https://phar.phpunit.de/phpunit.phar -L -o phpunit.phar
+	chmod +x phpunit.phar
+	sudo mv phpunit.phar /usr/local/bin/phpunit
+
+# Como yo tenia la version 5.5, he tenido que actualizarla a la 7.0 para que funcionase PHPUnit
+
+	# Para ello, me he instalado homebrew (un gestor de paquetes para macs), ejecutadon el siguiente comando
+		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+	# Los comandos necesarios para actualizar el php a la version 7.0 con homebrew, son los siguientes
+		brew tap homebrew/dupes
+		brew tap homebrew/versions
+		brew tap homebrew/homebrew-php
+		brew install php70
+
+	# Para probar si esta bien instalado
+		php --version
+
+# Ficheros necesarios para tu primer test
+ - Calculator.php
+ - CalculatorTest.php
+
+# Como ejecutar el test
+ 	phpunit CalculatorTest.php
