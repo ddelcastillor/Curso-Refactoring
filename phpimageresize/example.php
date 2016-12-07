@@ -1,5 +1,5 @@
 <?php
-# include the function here
+# include the function heres
 include 'function.resize.php';
 
 ?>
