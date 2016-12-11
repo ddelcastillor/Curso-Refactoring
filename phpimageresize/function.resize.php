@@ -1,22 +1,21 @@
 <?php
-functio sanitize($path){
+function sanitize($path){
 	return urldecode($imagePath);
 }
 
 function resize($imagePath,$opts=null){
-	$imagePath = sanitize($$imagePath);
+	$path = new ImagePath($imagePath);
+	$configuration = new Configuration($opts); 
+	$resizer = new Resizer($path,$configuration);
 
-	$configuration = new Configuration($opts);   
 	$opts = $options->asHash(); 
+	$imagePath = $path->sanitizedPath();
 	
-	$purl = parse_url($imagePath);
 	$finfo = pathinfo($imagePath);
 	$ext = $finfo['extension'];
 
-	# check for remote image..
-	if(isset($purl['scheme']) && ($purl['scheme'] == 'http' || $purl['scheme'] == 'https')):
-		# grab the image, and cache it so we have something to work with..
-		list($filename) = explode('?',$finfo['basename']);
+	if($path->isHttpProtocol()):
+		filename = $path->obtainFilename();
 		$local_filepath = $configuration->obtainRemote().$filename;
 		$download_image = true;
 		if(file_exists($local_filepath)):
